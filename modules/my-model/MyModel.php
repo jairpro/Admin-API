@@ -492,7 +492,12 @@ class MyModel {
   }
 
   function connect() {
-    require dirname(__FILE__)."/.config.php";
+    $dir = dirname(__FILE__)."/";
+    $config_php = $dir.".config.php";
+    if (!file_exists($config_php)) {
+      return false;
+    }
+    require $config_php;
     $dbdriver = DB_DRIVER; 
     $dbhost = DB_HOST;
     $dbname = DB_NAME;

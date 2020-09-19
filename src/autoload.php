@@ -13,7 +13,7 @@
       $lista[] = $dir . "middlewares/$classname.php";
       $lista[] = $dir . "$classname.php";
 
-      foreach ($lista as $index => $php) {
+      foreach ($lista as $php) {
         if (file_exists($php)) {
           require_once $php;
         }

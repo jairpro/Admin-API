@@ -22,6 +22,28 @@
 
 ## Instalação:
 
+### Configurar módulo principal:
+ 
+ 1) Copiar `.env.example.php` para `.env.php`;
+ 
+ 2) Configurar uma `.env.php` para o ambiente desejado;
+
+Constante | Descrição
+--------- | ---------
+ENV | Ambiente do sistema: *development* (padrão), *prodution*. Esse valor afeta determinadas funcionalidades. Verifique no código.
+JWT_TESTS | Quando verdadeiro permite uso das rotas de testes do JWT.
+RESET_JWT_SECRET | Chave para gerar o JWT para redefinir a senha (preencha após configurar o my-jwt, mais abaixo)
+RESET_JWT_TIMEOUT | Tempo em segundos para expirar o Token de redefinição de senha
+
+ 4) Neste ponto, já pode testar a rota raiz /
+    Deve abrir uma página com a mensagem: "Olá API!"
+
+ 5) Para as demais rotas funcionarem é necessário que seu servidor (no caso apache) reconheça .htaccess
+ Talvez [este artigo](https://www.digitalocean.com/community/questions/htaccess-doesn-t-work-on-ubuntu-droplet) possa ajudar caso tenha problemas com .htaccess . 
+
+ Dica: Para testes das rotas recomenda-se o *Insomnia*;
+
+
 ### Configurar my-jwt:
  
  1) Aplicar `composer install -d modules/my-jwt/` para instalar a dependência *Carbon*;
@@ -40,11 +62,13 @@ MY_JWT_TIMEOUT | Tempo em segundos para expirar o Token
        
       /util/jwt/generate-key
 
+  Aproveite para preencher a constante RESET_JWT_SECRET em /.env.php (veja na configuração do módulo principal).
+
 ### Configurar my-model:
 
   1) Criar usuário e banco de dados no *MySQL* (pode-se adaptar *MyModel* para outros drivers);
 
-  2) Na pasta `/modules/my-model/` copiar `.config.example.php` para `.config.php` e definir as constantes de conexão ao banco de dados;
+  2) Na pasta `/modules/my-model/` copiar `.config.example.php` para `.config.php` e definir as constantes de conexão ao banco de dados:
 
 Constante | Descrição
 --------- | ---------
@@ -63,27 +87,9 @@ DB_PASS | Senha do usuário do banco de dados.
 
   4) Tão logo, alterar a senha pela rota `PUT /admin/password`.
 
-  5) Alterar seu administrador (já pela rota `PUT /admin/:id`) e informar no campo email o seu próprio email para possibilitar a recuperação de senha pela API;
+  5) Alterar seu administrador (já pela rota `PUT /admin/:id`) e informar no campo email o seu próprio email para possibilitar a recuperação de senha pela API (configure my-sendgrid, logo baixo);
 
 NOTA: Novas migrations e seeds poderão ser criados. Para cada nova migration criar o undo correspondente com mesmo nome de arquivo na pasta: `src/database/migrations_undo/`.
-
-
-### Configurar módulo principal:
- 
- 1) Copiar `.env.example.php` para `.env.php`;
- 
- 2) Configurar uma `.env.php` para o ambiente desejado;
-
-Constante | Descrição
---------- | ---------
-ENV | Ambiente do sistema: *development* (padrão), *prodution*. Esse valor afeta determinadas funcionalidades. Verifique no código.
-JWT_TESTS | Quando verdadeiro permite uso das rotas de testes do JWT.
-RESET_JWT_SECRET | Chave para gerar o JWT para redefinir a senha
-RESET_JWT_TIMEOUT | Tempo em segundos para expirar o Token de redefinição de senha
-
- 3) Executar os script SQL para criar as tabelas no banco de dados da pasta `/src/database/create_tables`;
-
- Dica: Para testes das rotas recomenda-se o *Insomnia*;
 
 
 ### Configurar módulo my-sendgrid:

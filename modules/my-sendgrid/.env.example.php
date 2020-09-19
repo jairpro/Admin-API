@@ -23,6 +23,7 @@ define('MAIL_SERVICE_URL', "");
 define('MAIL_LOGO_ALT', "");
 define('MAIL_LOGO_SRC', "");
 
+define('MAIL_RESET_ADMIN_URL', "");
 define('MAIL_RESET_URL', "");
 
 define('MAIL_FROM_NAME_SIGNATURE', "");

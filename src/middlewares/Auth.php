@@ -1,6 +1,11 @@
 <?php
 
-require_once dirname(__FILE__)."/../../modules/my-jwt/.config.php";
+$jwt_config_php = dirname(__FILE__)."/../../modules/my-jwt/.config.php";
+if (!file_exists($jwt_config_php)) {
+  Response::getInstance()->status(500)->send(['error'=>"The environment file remains to be defined in my-jwt."]);
+}
+
+require_once $jwt_config_php;
 
 class Auth {
 

@@ -1,7 +1,14 @@
 <?php
 
 $dir = dirname(__FILE__)."/";
-require_once $dir."../../modules/my-sendgrid/.env.php";
+$env_php = $dir."../../modules/my-sendgrid/.env.php";
+if (!file_exists($env_php)) {
+  header("HTTP/1.1 500 Internal Server error");
+  header("Content-Type: application/json; charset=utf-8");
+  echo json_encode(['error'=>"The environment file remains to be defined to my-sendgrid."]);
+  exit();
+}
+require_once $env_php;
 
 class ForgotPasswordController {
 

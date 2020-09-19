@@ -1,9 +1,20 @@
 <?php
 
-$dir = dirname(__FILE__)."/";
-require_once $dir.".config.php";
-require_once $dir.'vendor/autoload.php';
+function requireOnceOrAbort($file, $message) {
+  if (!file_exists($file)) {
+    header("HTTP/1.1 500 Internal Server error");
+    header("Content-Type: application/json; charset=utf-8");
+    echo json_encode(['error'=> $message ]);
+    exit();
+  } 
+  require_once $file;
+}
 
+$dir = dirname(__FILE__)."/";
+
+requireOnceOrAbort($dir.".config.php", "The environment file remains to be defined to my-jwt.");
+
+requireOnceOrAbort($dir.'vendor/autoload.php', "The vendor/autoload file remains to be defined to my-jwt.");
 use Carbon\Carbon;
 
 class MyJWT {
@@ -130,7 +141,6 @@ class MyJWT {
   }
   
   function generateToken($data=null, $key=null) {
-    
     // get the local secret key
     //$secret = getenv('SECRET');
     //require dirname(__FILE__)."/.config.php";
