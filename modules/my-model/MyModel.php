@@ -446,6 +446,9 @@ class MyModel {
 
   function fetch($params=null, $sql=null) {
     $this->setup($params, $sql);
+    if (!$this->sth) {
+      return false;
+    }
     $value = $this->sth->fetch();
     return $value;
   }

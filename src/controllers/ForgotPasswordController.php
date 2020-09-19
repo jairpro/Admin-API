@@ -26,10 +26,12 @@ class ForgotPasswordController {
     if (!isset($data['user'])) {
       $res->status(400)->send(['error' => "Missing the user field."]);
     }
-
     $user = $data['user'];
 
     $model = new $this->modelClass();
+    if (!$model->setup()) {
+      $res->status(500)->send(['error'=>'Database connection failure.']);
+    }
 
     $found = $model->findOne([
       'or'=>[
