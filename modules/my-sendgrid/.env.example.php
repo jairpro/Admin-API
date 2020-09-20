@@ -2,6 +2,8 @@
 
 define('SENDGRID_API_KEY', '');
 
+define('MAIL_SEND_FAKE', false);
+
 define('MAIL_SERVICE_NAME', "");
 
 define('MAIL_FROM_EMAIL', "");

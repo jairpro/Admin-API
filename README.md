@@ -101,6 +101,7 @@ NOTA: Novas migrations e seeds poderão ser criados. Para cada nova migration cr
 Constante | Descrição
 --------- | ---------
 SENDGRID_API_KEY | Chave da API
+MAIL_SEND_FAKE | Quando *true* simula sucesso no envio dos emails. Defina para *false* para o envio efetivo de mensagens de email. 
 MAIL_SERVICE_NAME | Nome do serviço (Example)
 MAIL_FROM_EMAIL | E-mail do remetente (noreplay@example.com)
 MAIL_FROM_NAME | Nome do remetente (pode-se utilizar MAIL_SERVICE_NAME)

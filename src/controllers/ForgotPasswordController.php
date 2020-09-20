@@ -118,6 +118,7 @@ class ForgotPasswordController {
 </body>
 </html>
 ";
+    $fakeWarning = MAIL_SEND_FAKE ? ' (FAKE)' : '';
 
     $sendgrid = new MySendgrid();
     $result = $sendgrid->send([
@@ -132,9 +133,9 @@ class ForgotPasswordController {
     ]);
 
     if (!$result) {
-      $res->status(500)->send(['error' => "The message can not be sent."]);
+      $res->status(500)->send(['error' => "The message can not be$fakeWarning sent."]);
     }
 
-    return $res->send(['message'=>"Message sent successfully"]);
+    return $res->send(['message'=>"Message$fakeWarning sent successfully."]);
   }
 }

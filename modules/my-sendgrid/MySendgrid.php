@@ -1,5 +1,7 @@
 <?php
 
+use SendGrid\Response;
+
 $dir = dirname(__FILE__)."/";
 require $dir.'vendor/autoload.php';
 require_once $dir.'.env.php';
@@ -18,6 +20,12 @@ class MySendgrid {
   }
 
   function send($data) {
+    if (MAIL_SEND_FAKE) {
+      $this->response = new Response(202);
+      $this->errorMessage = null;
+      return true;
+    }
+
     $result = false;
 
     $fromEmail = isset($data['fromEmail']) ? $data['fromEmail'] : MAIL_FROM_EMAIL;
