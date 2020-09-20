@@ -1,2 +1,4 @@
 /vendor
 .env.php
+.env.development.php
+.env.production.php
