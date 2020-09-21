@@ -13,13 +13,32 @@ class ResetPasswordController {
     }
 
     $data = $req->body();
-    $newPassword = isset($data['newPassword']) ? $data['newPassword'] : false;
-    $confirmPassword = isset($data['confirmPassword']) ? $data['confirmPassword'] : false;
-    if (!$newPassword || !$confirmPassword || $newPassword!==$confirmPassword) {
-      return $res->status(400)->send(['error'=>'Password error.']);
+
+    if (!isset($data['newPassword'])) {
+      return $res->status(400)->send(['error'=>'Missing new password.']);
+    }
+    $newPassword = $data['newPassword'];
+    if (empty($newPassword)) {
+      return $res->status(400)->send(['error'=>'The new password cannot be empty.']);
+    }
+
+    if (!isset($data['confirmPassword'])) {
+      return $res->status(400)->send(['error'=>'Missing confirmation password.']);
+    }
+    $confirmPassword = $data['confirmPassword'];
+    if (empty($confirmPassword)) {
+      return $res->status(400)->send(['error'=>'Confirmation password cannot be empty.']);
+    }
+
+    if ($newPassword!==$confirmPassword) {
+      return $res->status(400)->send(['error'=>'The confirmation password must be the same new password.']);
     }
     
     $model = new Admin();
+    if (!$model->setup()) {
+      $res->status(500)->send(['error'=>'Database connection failure.']);
+    }
+
     $id = $req->userId;
     $found = $model->findByPk($id);
     if (!$found) {
