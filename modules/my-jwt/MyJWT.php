@@ -70,12 +70,18 @@ class MyJWT {
       'valid' => false
     ];
 
-    if (!$token) {
-      $this->result['message'] = 'Please provide a key to verify.';
+    if (!is_string($token) || empty($token)) {
+      $this->result['message'] = 'Token is invalid.';
       $this->message = $this->result['message'];
       return false;
     }
 
+    if (!is_string($secret)) {
+      $this->result['message'] = 'Please provide a key to verify.';
+      $this->message = $this->result['message'];
+      return false;
+    }
+    
     $jwt = $token;
 
     // split the token
