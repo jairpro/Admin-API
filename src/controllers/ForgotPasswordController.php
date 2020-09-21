@@ -52,11 +52,11 @@ class ForgotPasswordController {
   
     $toName = isset($found[$this->fieldName]) ? $found[$this->fieldName] : "";
 
-
     $jwt = new MyJWT();
     $jwt->timeout(RESET_JWT_TIMEOUT);
     $tokenData = [
-      'id' => $found['id']
+      'id' => $found['id'],
+      'user' => $found['user']
     ];
     $resetToken = $jwt->generateToken($tokenData, RESET_JWT_SECRET);
 
