@@ -35,7 +35,7 @@ class ForgotPasswordController {
       if (!$model->setup()) {
         $res->status(500)->send(['error'=>'Database connection failure.']);
       }
-      
+
       $found = $model->findByPk($req->userId);
     }
 
@@ -73,8 +73,7 @@ class ForgotPasswordController {
     $jwt = new MyJWT();
     $jwt->timeout(RESET_JWT_TIMEOUT);
     $tokenData = [
-      'id' => $found['id'],
-      'user' => $found['user']
+      'id' => $found['id']
     ];
     $resetToken = $jwt->generateToken($tokenData, RESET_JWT_SECRET);
 
