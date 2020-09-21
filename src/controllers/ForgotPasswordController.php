@@ -19,26 +19,44 @@ class ForgotPasswordController {
 
   function store($req, $res) {
     $data = $req->body();
+
     if (!is_array($data)) {
-      $res->status(400)->send(['error' => "Invalid request body."]);
+
+      $auth = new Auth(RESET_JWT_SECRET);
+      if (!$auth->execute($req,$res)) {
+        return false;
+      }
+      
+      if (!$req->userId) {
+        $res->status(401)->send(['error'=>"Invalid Token."]);
+      }
+  
+      $model = new $this->modelClass();
+      if (!$model->setup()) {
+        $res->status(500)->send(['error'=>'Database connection failure.']);
+      }
+
+      $found = $model->findByPk($req->userId);
     }
 
-    if (!isset($data['user'])) {
-      $res->status(400)->send(['error' => "Missing the user field."]);
+    else {
+      if (!isset($data['user'])) {
+        $res->status(400)->send(['error' => "Missing the user field."]);
+      }
+      $user = $data['user'];
+    
+      $model = new $this->modelClass();
+      if (!$model->setup()) {
+        $res->status(500)->send(['error'=>'Database connection failure.']);
+      }
+ 
+      $found = $model->findOne([
+        'or'=>[
+          $this->fieldUser => $user,
+          $this->fieldEmail => $user
+        ]
+      ]);
     }
-    $user = $data['user'];
-
-    $model = new $this->modelClass();
-    if (!$model->setup()) {
-      $res->status(500)->send(['error'=>'Database connection failure.']);
-    }
-
-    $found = $model->findOne([
-      'or'=>[
-        $this->fieldUser => $user,
-        $this->fieldEmail => $user
-      ]
-    ]);
 
     if (!$found) {
       $res->status(400)->send(['message' => "User not found."]);
@@ -51,7 +69,6 @@ class ForgotPasswordController {
     }
   
     $toName = isset($found[$this->fieldName]) ? $found[$this->fieldName] : "";
-
 
     $jwt = new MyJWT();
     $jwt->timeout(RESET_JWT_TIMEOUT);

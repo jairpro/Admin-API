@@ -9,6 +9,7 @@
   $router->get("/util/jwt/validate", ["JwtController","validate"]);
   
   $router->post("/admin/forgot_password", ["ForgotPasswordController","store"]);
+  $router->post("/admin/forgot_password/resend", ["ForgotPasswordController","store"]);
   //$router->get("/admin/reset_password", ["ResetPasswordController","index"]);
   $router->put("/admin/reset_password", ["ResetPasswordController","update"]);
   
